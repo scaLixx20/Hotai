@@ -27,6 +27,7 @@
             background-color: var(--light-color);
             color: var(--text-color);
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         /* Header dan Navigasi */
@@ -67,6 +68,38 @@
             font-size: 1.8rem;
         }
         
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+            background: none;
+            border: none;
+        }
+        
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-color);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Animasi hamburger saat active */
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        
         nav ul {
             display: flex;
             list-style: none;
@@ -94,7 +127,7 @@
         /* Konten Halaman */
         .page {
             display: none;
-            padding: 3rem 5%;
+            padding: 2rem 5%;
             min-height: calc(100vh - 150px);
             animation: fadeIn 0.5s ease-in-out;
         }
@@ -180,8 +213,8 @@
         }
         
         .hero-image img {
-            width: 50%;
             max-width: 100%;
+            width: 50%;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
@@ -501,27 +534,32 @@
             transform: translateY(-3px);
         }
         
-        /* Responsif */
+        /* Responsif - Mobile */
         @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
+            header {
+                padding: 1rem;
             }
             
-            .hero-content {
-                padding-right: 0;
-                margin-bottom: 2rem;
+            /* Tampilkan hamburger menu di mobile */
+            .menu-toggle {
+                display: flex;
             }
             
+            /* Sembunyikan menu navigasi default di mobile */
             nav ul {
-                flex-direction: column;
+                display: none;
                 position: absolute;
-                top: 70px;
+                top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: white;
-                display: none;
+                background: white;
+                flex-direction: column;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                z-index: 1000;
+                padding: 1rem 0;
             }
             
+            /* Tampilkan menu ketika hamburger diklik */
             nav ul.show {
                 display: flex;
             }
@@ -529,18 +567,46 @@
             nav ul li {
                 margin: 0;
                 text-align: center;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            nav ul li:last-child {
+                border-bottom: none;
             }
             
             nav ul li a {
                 display: block;
                 padding: 1rem;
+                border-radius: 0;
             }
             
+            nav ul li a:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            /* Hero section mobile */
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            /* Social media mobile */
             .social-media {
                 flex-wrap: wrap;
+                gap: 1rem;
             }
             
+            /* Button mobile */
             .btn, .btn-order {
                 padding: 0.8rem 1.5rem;
                 font-size: 0.95rem;
@@ -555,6 +621,7 @@
                 margin-bottom: 1rem;
             }
             
+            /* Quantity selector mobile */
             .quantity-selector {
                 padding: 0.4rem;
             }
@@ -563,6 +630,40 @@
                 width: 30px;
                 height: 30px;
                 font-size: 1rem;
+            }
+            
+            /* Page padding mobile */
+            .page {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Responsif - Mobile kecil */
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .quantity-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .social-icon {
+                width: 80px;
+                padding: 0.8rem;
+            }
+            
+            .social-icon i {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -574,6 +675,14 @@
             <img src="hotai.jpg" alt="HOTAI Logo">
             <h1>HOTAI</h1>
         </div>
+        
+        <!-- Hamburger Menu (3 garis) -->
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
         <nav>
             <ul id="nav-menu">
                 <li><a href="#" class="nav-link active" data-page="beranda">Beranda</a></li>
@@ -745,7 +854,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 HOTAI. All rights reserved.</p>
+        <p>&copy; 2025 HOTAI. All rights reserved. | <a href="https://www.instagram.com/hotai.id/" style="color: #ffab91;" target="_blank">@hotai.id</a></p>
     </footer>
 
     <!-- Back to Top Button -->
@@ -758,7 +867,26 @@
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
             const pages = document.querySelectorAll('.page');
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('nav-menu');
             
+            // Hamburger Menu Toggle
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+                menuToggle.classList.toggle('active');
+            });
+            
+            // Tutup menu ketika link diklik (di mobile)
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        navMenu.classList.remove('show');
+                        menuToggle.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Navigasi antar halaman
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -800,16 +928,8 @@
                 });
             }
             
-            // Quantity Selector Functionality - FIXED
+            // Quantity Selector Functionality
             function setupQuantitySelectors() {
-                const quantityButtons = document.querySelectorAll('.quantity-btn');
-                
-                quantityButtons.forEach(button => {
-                    // Hapus event listener yang lama jika ada
-                    button.replaceWith(button.cloneNode(true));
-                });
-                
-                // Tambah event listener yang baru
                 document.querySelectorAll('.quantity-btn').forEach(button => {
                     button.addEventListener('click', function() {
                         const menuType = this.getAttribute('data-menu');
