@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOTAI - Hot Mentai | Makanan Mentai Pedas Terbaik</title>
+    <meta name="description" content="HOTAI menyajikan hidangan mentai pedas dengan cita rasa terbaik. Pesan sekarang dan nikmati kelezatan Hot Mentai Original, Extra Spicy, dan Cheese Lava.">
+    <style>
+        /* Reset dan variabel warna */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #d32f2f;
+            --secondary-color: #ff7043;
+            --accent-color: #ffab91;
+            --dark-color: #5d4037;
+            --light-color: #fff8e1;
+            --text-color: #333;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Header dan Navigasi */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #000000;
+            padding: 2px;
+            filter: 
+                hue-rotate(-10deg)
+                saturate(1.8)
+                brightness(0.9)
+                contrast(1.2);
+        }
+        
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover, 
+        nav ul li a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Konten Halaman */
+        .page {
+            display: none;
+            padding: 3rem 5%;
+            min-height: calc(100vh - 150px);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Beranda */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Tombol Utama */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            width: 50%;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Tentang */
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .about-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Menu */
+        .menu-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .menu-intro h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .menu-item {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item p {
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Quantity Selector */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            background: #f5f5f5;
+            border-radius: 50px;
+            padding: 0.5rem;
+        }
+        
+        .quantity-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+        
+        .quantity-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .quantity-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        /* Tombol Pesan di Menu */
+        .btn-order {
+            background: linear-gradient(135deg, var(--primary-color), #e64a19);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-order::after {
+            content: '🚀';
+            margin-left: 8px;
+            font-size: 0.9em;
+        }
+
+        .btn-order::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-order:hover {
+            background: linear-gradient(135deg, #c62828, var(--secondary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(211, 47, 47, 0.4);
+        }
+
+        .btn-order:hover::before {
+            left: 100%;
+        }
+        
+        /* Lokasi */
+        .location-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .location-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .location-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .location-info h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .location-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .location-map {
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Kontak */
+        .contact-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .contact-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .social-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.3s ease;
+            padding: 1rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            width: 120px;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .social-icon i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        /* Responsif */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+            }
+            
+            .hero-content {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                display: none;
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 0;
+                text-align: center;
+                border-bottom: 1px solid #eee;
+            }
+            
+            nav ul li a {
+                display: block;
+                padding: 1rem;
+            }
+            
+            .social-media {
+                flex-wrap: wrap;
+            }
+            
+            .btn, .btn-order {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            
+            .btn-order::after {
+                font-size: 0.8em;
+            }
+            
+            .social-icon {
+                width: 100px;
+                margin-bottom: 1rem;
+            }
+            
+            .quantity-selector {
+                padding: 0.4rem;
+            }
+            
+            .quantity-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="hotai.jpg" alt="HOTAI Logo">
+            <h1>HOTAI</h1>
+        </div>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="beranda">Beranda</a></li>
+                <li><a href="#" class="nav-link" data-page="tentang">Tentang</a></li>
+                <li><a href="#" class="nav-link" data-page="menu">Menu</a></li>
+                <li><a href="#" class="nav-link" data-page="lokasi">Lokasi</a></li>
+                <li><a href="#" class="nav-link" data-page="kontak">Kontak</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Halaman Beranda -->
+        <section id="beranda" class="page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Rasakan Kelezatan Hot Mentai</h2>
+                    <p>HOTAI menghadirkan cita rasa mentai yang pedas dan gurih dengan kualitas terbaik. Dibuat dari bahan-bahan pilihan dan resep rahasia yang membuat setiap gigitan terasa istimewa.</p>
+                    <a href="#" class="btn" data-page="menu">Lihat Menu</a>
+                </div>
+                <div class="hero-image">
+                    <img src="produk-hero.jpg" alt="Hot Mentai">
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>Bahan Berkualitas</h3>
+                    <p>Menggunakan bahan-bahan segar dan berkualitas tinggi untuk rasa terbaik.</p>
+                </div>
+                <div class="feature">
+                    <h3>Resep Rahasia</h3>
+                    <p>Resep khusus yang dikembangkan dengan cinta untuk pengalaman kuliner unik.</p>
+                </div>
+                <div class="feature">
+                    <h3>Harga Terjangkau</h3>
+                    <p>Nikmati kelezatan premium dengan harga yang ramah di kantong.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Tentang -->
+        <section id="tentang" class="page">
+            <div class="about-content">
+                <h2>Tentang HOTAI</h2>
+                <p>HOTAI adalah brand makanan yang mengkhususkan diri pada hidangan dengan saus mentai pedas. Kami berkomitmen untuk menghadirkan pengalaman kuliner yang tak terlupakan dengan kombinasi rasa gurih, manis, dan pedas yang seimbang.</p>
+                <p>Dibuat dengan bahan-bahan pilihan dan proses pembuatan yang higienis, setiap hidangan HOTAI dirancang untuk memuaskan selera pecinta makanan pedas dan gurih.</p>
+                <p>Dengan semangat inovasi, kami terus mengembangkan varian rasa baru untuk memberikan pengalaman yang selalu segar bagi pelanggan setia HOTAI.</p>
+            </div>
+        </section>
+
+        <!-- Halaman Menu -->
+        <section id="menu" class="page">
+            <div class="menu-intro">
+                <h2>Menu HOTAI</h2>
+                <p>Temukan berbagai varian Hot Mentai yang menggugah selera</p>
+            </div>
+            
+            <div class="menu-items">
+                <div class="menu-item">
+                    <img src="produk-hero.jpg" alt="Hot Mentai Original">
+                    <div class="menu-item-content">
+                        <h3>Hot Mentai Original</h3>
+                        <p>Rasa mentai klasik dengan sentuhan pedas yang pas.</p>
+                        <p class="price">Rp 10.000</p>
+                        
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-menu="original">-</button>
+                            <span class="quantity-display" data-menu="original">1</span>
+                            <button class="quantity-btn plus" data-menu="original">+</button>
+                        </div>
+                        
+                        <button class="btn-order" data-menu="Hot Mentai Original" data-price="10000">Pesan Sekarang</button>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <img src="spicy.jpg" alt="Hot Mentai Extra Spicy">
+                    <div class="menu-item-content">
+                        <h3>Hot Mentai Extra Spicy</h3>
+                        <p>Untuk pecinta pedas sejati!</p>
+                        <p class="price">Rp 12.000</p>
+                        
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-menu="spicy">-</button>
+                            <span class="quantity-display" data-menu="spicy">1</span>
+                            <button class="quantity-btn plus" data-menu="spicy">+</button>
+                        </div>
+                        
+                        <button class="btn-order" data-menu="Hot Mentai Extra Spicy" data-price="12000">Pesan Sekarang</button>
+                    </div>
+                </div>
+                
+                <div class="menu-item">
+                    <img src="cheese.jpg" alt="Hot Mentai Cheese Lava">
+                    <div class="menu-item-content">
+                        <h3>Hot Mentai Cheese Lava</h3>
+                        <p>Perpaduan saus mentai pedas dengan keju mozzarella yang lumer.</p>
+                        <p class="price">Rp 15.000</p>
+                        
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-menu="cheese">-</button>
+                            <span class="quantity-display" data-menu="cheese">1</span>
+                            <button class="quantity-btn plus" data-menu="cheese">+</button>
+                        </div>
+                        
+                        <button class="btn-order" data-menu="Hot Mentai Cheese Lava" data-price="15000">Pesan Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Lokasi -->
+        <section id="lokasi" class="page">
+            <div class="location-content">
+                <h2>Lokasi Kami</h2>
+                <p>Kunjungi kami di lokasi berikut</p>
+                
+                <div class="location-info">
+                    <h2><i class="fas fa-map-marker-alt"></i> Lokasi Kami</h2>
+                    <p>Kami berada di:</p>
+                    <p><strong>SMK HANG TUAH 1 JAKARTA</strong></p>
+                    <p>Jl. Raya Cilincing No.1, Cilincing, Jakarta Utara</p>
+                    
+                    <div class="location-map">
+                        <!-- Placeholder untuk peta -->
+                        <div style="width: 100%; height: 200px; background-color: #eee; display: flex; align-items: center; justify-content: center; color: #666;">
+                            <i class="fas fa-map" style="font-size: 3rem; margin-right: 10px;"></i>
+                            <span>Peta Lokasi SMK Hang Tuah 1 Jakarta</span>
+                        </div>
+                    </div>
+                    
+                    <a href="https://maps.google.com/?q=SMK+Hang+Tuah+1+Jakarta" target="_blank" class="btn" style="margin-top: 1rem;">
+                        <i class="fas fa-directions"></i> Lihat di Google Maps
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Kontak -->
+        <section id="kontak" class="page">
+            <div class="contact-content">
+                <h2>Hubungi Kami</h2>
+                <p>Ikuti media sosial kami untuk informasi terbaru tentang promo dan varian menu baru</p>
+                
+                <div class="social-media">
+                    <a href="https://www.instagram.com/hotai.id/" class="social-icon" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://www.tiktok.com/@hotai.id" class="social-icon" target="_blank">
+                        <i class="fab fa-tiktok"></i>
+                        <span>TikTok</span>
+                    </a>
+                    <a href="https://wa.me/6289507480940" class="social-icon" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 HOTAI. All rights reserved.</p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <script>
+        // Navigasi antar halaman
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hapus kelas active dari semua link dan halaman
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    pages.forEach(page => page.classList.remove('active'));
+                    
+                    // Tambah kelas active ke link yang diklik
+                    this.classList.add('active');
+                    
+                    // Tampilkan halaman yang sesuai
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(pageId).classList.add('active');
+                    
+                    // Scroll ke atas ketika pindah halaman
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+            
+            // Untuk tombol di beranda yang mengarah ke menu
+            const menuBtn = document.querySelector('.btn[data-page="menu"]');
+            if(menuBtn) {
+                menuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hapus kelas active dari semua link dan halaman
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    pages.forEach(page => page.classList.remove('active'));
+                    
+                    // Tambah kelas active ke link menu
+                    document.querySelector('.nav-link[data-page="menu"]').classList.add('active');
+                    
+                    // Tampilkan halaman menu
+                    document.getElementById('menu').classList.add('active');
+                    
+                    // Scroll ke atas
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            
+            // Quantity Selector Functionality - FIXED
+            function setupQuantitySelectors() {
+                const quantityButtons = document.querySelectorAll('.quantity-btn');
+                
+                quantityButtons.forEach(button => {
+                    // Hapus event listener yang lama jika ada
+                    button.replaceWith(button.cloneNode(true));
+                });
+                
+                // Tambah event listener yang baru
+                document.querySelectorAll('.quantity-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const menuType = this.getAttribute('data-menu');
+                        const quantityDisplay = document.querySelector(`.quantity-display[data-menu="${menuType}"]`);
+                        let quantity = parseInt(quantityDisplay.textContent);
+                        
+                        if (this.classList.contains('plus')) {
+                            quantity++;
+                        } else if (this.classList.contains('minus') && quantity > 1) {
+                            quantity--;
+                        }
+                        
+                        quantityDisplay.textContent = quantity;
+                        
+                        // Update button states
+                        updateButtonStates(menuType, quantity);
+                    });
+                });
+            }
+            
+            function updateButtonStates(menuType, quantity) {
+                const minusButton = document.querySelector(`.minus[data-menu="${menuType}"]`);
+                if (quantity <= 1) {
+                    minusButton.disabled = true;
+                    minusButton.style.opacity = '0.5';
+                } else {
+                    minusButton.disabled = false;
+                    minusButton.style.opacity = '1';
+                }
+            }
+            
+            // Initialize quantity selectors
+            setupQuantitySelectors();
+            
+            // Initialize button states
+            document.querySelectorAll('.quantity-display').forEach(display => {
+                const menuType = display.getAttribute('data-menu');
+                const quantity = parseInt(display.textContent);
+                updateButtonStates(menuType, quantity);
+            });
+            
+            // Fungsi untuk pesan langsung via WhatsApp (dengan quantity)
+            function orderViaWhatsApp(menuName, price, quantity) {
+                // Hitung total harga
+                const totalPrice = price * quantity;
+                
+                // Format pesan otomatis
+                const message = `Halo HOTAI! Saya mau pesan:
+                
+🍱 *${menuName}*
+📦 Jumlah: ${quantity} porsi
+💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}
+
+Apakah bisa dipesan? Terima kasih!`;
+
+                // Encode message untuk URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Ganti nomor WhatsApp dengan nomor bisnis yang benar
+                const phoneNumber = '6289507480940';
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                
+                // Buka WhatsApp
+                window.open(whatsappUrl, '_blank');
+            }
+
+            // Event listener untuk tombol pesan (dengan quantity)
+            const orderButtons = document.querySelectorAll('.btn-order');
+            
+            orderButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const menuName = this.getAttribute('data-menu');
+                    const price = parseInt(this.getAttribute('data-price'));
+                    const menuType = menuName.includes('Original') ? 'original' : 
+                                   menuName.includes('Extra Spicy') ? 'spicy' : 'cheese';
+                    
+                    const quantityDisplay = document.querySelector(`.quantity-display[data-menu="${menuType}"]`);
+                    const quantity = parseInt(quantityDisplay.textContent);
+                    
+                    orderViaWhatsApp(menuName, price, quantity);
+                });
+            });
+            
+            // Back to top button
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
